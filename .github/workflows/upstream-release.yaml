@@ -35,6 +35,10 @@ jobs:
           ref: ${{ matrix.tag }}
       - uses: snapcore/action-build@v1
         id: snapcraft
+      - id: get-snaps
+        run: | 
+          echo -n "snaps=" >> "${GITHUB_OUTPUT}"
+          ls -1 *.snap >> "${GITHUB_OUTPUT}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -42,7 +46,7 @@ jobs:
           body: See upstream release at https://github.com/charliermarsh/ruff/releases/tag/${{ matrix.tag }}
           prerelease: ${{ contains(matrix.tag, 'pre') }}
           tag_name: ${{ matrix.tag }}
-          files: "*.snap"
+          files: ${{ steps.get-snaps.output.snaps }}
       - name: Publish to snapcraft.io
         uses: snapcore/action-publish@v1
         env:
