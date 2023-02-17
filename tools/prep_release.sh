@@ -9,5 +9,5 @@ release_file=$3
 
 echo "Preparing upstream release ${upstream_release}"
 
-echo "Setting version to ${release_tag}"
-sed -i 's/^\(version: \).*$/\1'"${release_tag}"'/' snap/snapcraft.yaml
+echo "Setting snap version to ${upstream_release}"
+sed -i 's/^\(version: \).*$/\1'"${upstream_release}"'/' snap/snapcraft.yaml
