@@ -31,7 +31,7 @@ jobs:
         tag: ${{ fromJSON(needs.sync-gh-releases.outputs.release_tags) }}
     steps:
       - name: Install Snapcraft
-        run: snap install --classic snapcraft
+        run: sudo snap install --classic snapcraft
       - uses: actions/checkout@v3
         with:
           ref: ${{ matrix.tag }}
@@ -48,10 +48,16 @@ jobs:
           prerelease: ${{ contains(matrix.tag, 'pre') }}
           tag_name: ${{ matrix.tag }}
           files: ${{ steps.get-snaps.output.snaps }}
-      - name: Publish to snapcraft.io
-        uses: snapcore/action-publish@v1
+      # Not using this because it can only push one snap at a time.
+      # - name: Publish to snapcraft.io
+      #   uses: snapcore/action-publish@v1
+      #   env:
+      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
+      #   with:
+      #     snap: "*.snap"
+      #     release: candidate
+      - name: Publish to Snapcraft
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
-        with:
-          snap: "*.snap"
-          release: candidate
+        run: |
+          echo ${{ steps.get-snaps.output.snaps }} | xargs --max-args=1 --max-procs=0 snapcraft upload --quiet --release latest/candidate
