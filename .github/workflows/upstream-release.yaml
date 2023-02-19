@@ -37,9 +37,6 @@ jobs:
           ref: ${{ matrix.tag }}
       - uses: snapcore/action-build@v1
         id: snapcraft
-      - id: get-snaps
-        run: | 
-          echo -n "snaps='$(find . -maxdepth 1 -name *.snap -printf '%p ')'" >> "${GITHUB_OUTPUT}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -47,7 +44,7 @@ jobs:
           body: See upstream release at https://github.com/charliermarsh/ruff/releases/tag/${{ matrix.tag }}
           prerelease: ${{ contains(matrix.tag, 'pre') }}
           tag_name: ${{ matrix.tag }}
-          files: ${{ steps.get-snaps.output.snaps }}
+          files: *.snap
       # Not using this because it can only push one snap at a time.
       # - name: Publish to snapcraft.io
       #   uses: snapcore/action-publish@v1
@@ -60,4 +57,4 @@ jobs:
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
         run: |
-          echo ${{ steps.get-snaps.output.snaps }} | xargs --max-args=1 --max-procs=0 snapcraft upload --quiet --release latest/candidate
+          echo *.snap | xargs --max-args=1 --max-procs=0 snapcraft upload --quiet --release latest/candidate
