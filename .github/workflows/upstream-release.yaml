@@ -30,6 +30,8 @@ jobs:
       matrix:
         tag: ${{ fromJSON(needs.sync-gh-releases.outputs.release_tags) }}
     steps:
+      - name: Install Snapcraft
+        run: snap install --classic snapcraft
       - uses: actions/checkout@v3
         with:
           ref: ${{ matrix.tag }}
@@ -37,12 +39,11 @@ jobs:
         id: snapcraft
       - id: get-snaps
         run: | 
-          echo -n "snaps=" >> "${GITHUB_OUTPUT}"
-          ls -1 *.snap >> "${GITHUB_OUTPUT}"
+          echo -n "snaps='$(find . -maxdepth 1 -name *.snap -printf '%p ')'" >> "${GITHUB_OUTPUT}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: GitHub CLI ${{ matrix.tag }}
+          name: Ruff ${{ matrix.tag }}
           body: See upstream release at https://github.com/charliermarsh/ruff/releases/tag/${{ matrix.tag }}
           prerelease: ${{ contains(matrix.tag, 'pre') }}
           tag_name: ${{ matrix.tag }}
