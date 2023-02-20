@@ -19,6 +19,7 @@ jobs:
     uses: lengau/snappify/.github/workflows/sync-gh-releases.yaml@v0.0.2
     with:
       upstream_repository: charliermarsh/ruff
+      max_releases: 2
       prep_script: tools/prep_release.sh
   do_releases:
     name: Release ${{ matrix.tag }}
