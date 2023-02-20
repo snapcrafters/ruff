@@ -16,7 +16,7 @@ permissions:
 jobs:
   sync-gh-releases:
     name: Sync upstream releases
-    uses: lengau/snappify/.github/workflows/sync-gh-releases.yaml@v0.0.2
+    uses: lengau/snappify/.github/workflows/sync-gh-releases.yaml@v0.0.3
     with:
       upstream_repository: charliermarsh/ruff
       max_releases: 2
