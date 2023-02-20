@@ -45,14 +45,6 @@ jobs:
           prerelease: ${{ contains(matrix.tag, 'pre') }}
           tag_name: ${{ matrix.tag }}
           files: *.snap
-      # Not using this because it can only push one snap at a time.
-      # - name: Publish to snapcraft.io
-      #   uses: snapcore/action-publish@v1
-      #   env:
-      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
-      #   with:
-      #     snap: "*.snap"
-      #     release: candidate
       - name: Publish to Snapcraft
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
