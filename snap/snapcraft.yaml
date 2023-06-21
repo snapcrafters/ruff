@@ -1,5 +1,5 @@
 name: ruff
-version: v0.0.273
+version: v0.0.274
 summary: An extremely fast Python linter, written in Rust.
 # noinspection YAMLSchemaValidation
 # https://youtrack.jetbrains.com/issue/PY-58754
@@ -91,12 +91,12 @@ parts:
   ruff:
     plugin: dump
     source:
-      - to amd64: https://github.com/charliermarsh/ruff/releases/download/v0.0.273/ruff-x86_64-unknown-linux-gnu.tar.gz
-      - to arm64: https://github.com/charliermarsh/ruff/releases/download/v0.0.273/ruff-aarch64-unknown-linux-gnu.tar.gz
-      - to armhf: https://github.com/charliermarsh/ruff/releases/download/v0.0.273/ruff-armv7-unknown-linux-gnueabihf.tar.gz
-      - to i386: https://github.com/charliermarsh/ruff/releases/download/v0.0.273/ruff-i686-unknown-linux-gnu.tar.gz
-      - to ppc64el: https://github.com/charliermarsh/ruff/releases/download/v0.0.273/ruff-powerpc64le-unknown-linux-gnu.tar.gz
-      - to s390x: https://github.com/charliermarsh/ruff/releases/download/v0.0.273/ruff-s390x-unknown-linux-gnu.tar.gz
+      - to amd64: https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-x86_64-unknown-linux-gnu.tar.gz
+      - to arm64: https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-aarch64-unknown-linux-gnu.tar.gz
+      - to armhf: https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-armv7-unknown-linux-gnueabihf.tar.gz
+      - to i386: https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-i686-unknown-linux-gnu.tar.gz
+      - to ppc64el: https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-powerpc64le-unknown-linux-gnu.tar.gz
+      - to s390x: https://github.com/charliermarsh/ruff/releases/download/v0.0.274/ruff-s390x-unknown-linux-gnu.tar.gz
     source-type: tar
     stage:
       - ruff
