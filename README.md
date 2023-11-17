@@ -2,12 +2,14 @@
 
 A [snapcraft](https://snapcraft.io/about) package for [Ruff](https://github.com/charliermarsh/ruff). It also contains flake8-to-ruff.
 
+NOTE: The core24 branch contains a testing version of this snap using the prerelease
+core24 ubuntu base. Use with caution.
+
 ## Installing
 
-Right now, each release gets automatically pushed to the `candidate` channel.
-For now, it is recommended you use that:
+To install the core24 branch, you can run:
 
-    sudo snap install --candidate ruff 
+    sudo snap install --channel=latest/beta/core24 ruff 
 
 ## Build
 
