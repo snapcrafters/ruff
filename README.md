@@ -1,13 +1,12 @@
 # ruff-snap
 
-A [snapcraft](https://snapcraft.io/about) package for [Ruff](https://github.com/charliermarsh/ruff). It also contains flake8-to-ruff.
+A [snap](https://snapcraft.io/about) package for [Ruff](https://github.com/charliermarsh/ruff). It also contains flake8-to-ruff.
 
 ## Installing
 
-Right now, each release gets automatically pushed to the `candidate` channel.
-For now, it is recommended you use that:
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ruff)
 
-    sudo snap install --candidate ruff 
+    sudo snap install ruff 
 
 ## Build
 
