@@ -23,6 +23,6 @@ jobs:
           date > .last_sync
           git config user.name 'Automatic sync trigger bot'
           git config user.email 'bots+ruff-sync-trigger@port0.dev'
-          git add .last-sync
+          git add .last_sync
           git commit -m 'Trigger a new LP build'
           git push
