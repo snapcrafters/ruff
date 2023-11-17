@@ -1,5 +1,5 @@
 name: ruff
-version: v0.0.247
+version: v0.1.4
 summary: An extremely fast Python linter, written in Rust.
 # noinspection YAMLSchemaValidation
 # https://youtrack.jetbrains.com/issue/PY-58754
@@ -29,88 +29,44 @@ compression: xz
 contact: https://github.com/lengau/ruff/issues
 issues:
   - https://github.com/lengau/ruff-snap/issues
-  - https://github.com/charliermarsh/ruff/issues
-source-code: https://github.com/charlier/ruff
-website: https://github.com/charliermarsh/ruff
-# This is essentially "build on any arch, for any arch"
-architectures:
-  - build-on: [amd64,i386,arm64,armhf,s390x,ppc64el]
-    build-for: amd64
-  - build-on: [amd64,i386,arm64,armhf,s390x,ppc64el]
-    build-for: i386
-  - build-on: [amd64,i386,arm64,armhf,s390x,ppc64el]
-    build-for: arm64
-  - build-on: [amd64,i386,arm64,armhf,s390x,ppc64el]
-    build-for: armhf
-  - build-on: [amd64,i386,arm64,armhf,s390x,ppc64el]
-    build-for: s390x
-  - build-on: [amd64,i386,arm64,armhf,s390x,ppc64el]
-    build-for: ppc64el
+  - https://github.com/astral-sh/ruff/issues
+source-code: https://github.com/astral-sh/ruff
+website: https://github.com/astral-sh/ruff
+
+build-packages:
+  - curl
 
 parts:
-  flake8-to-ruff:
+  rust-deps:  # TODO: This will no longer be needed with Snapcraft 8
     plugin: nil
-    build-packages:
-      - python3-pip
-      - unzip
-    # TODO: switch flake8-to-ruff to GH binaries once they exist
     override-pull: |
-      export RUFF_VERSION=$(craftctl get version)
-      craftctl default
-      case "${CRAFT_TARGET_ARCH}" in
-      amd64)
-        export PIP_PLATFORM=manylinux2014_x86_64
-        ;;
-      i386)
-        export PIP_PLATFORM=manylinux2014_i686
-        ;;
-      arm64)
-        export PIP_PLATFORM=manylinux2014_aarch64
-        ;;
-      ppc64el)
-        export PIP_PLATFORM=manylinux2014_ppc64le
-        ;;
-      armhf)
-        export PIP_PLATFORM=manylinux2014_armv7l
-        ;;
-      *)
-        export PIP_PLATFORM=manylinux2014_$CRAFT_TARGET_ARCH
-        ;;
-      esac
-      # flake8-to-ruff doesn't get published at every release, so we
-      # grab the latest version at or below the release version.
-      pip3 download --only-binary=:all: "flake8-to-ruff<=${RUFF_VERSION}"
-    override-build: |
-      craftctl default
-      mkdir -p "${CRAFT_STAGE}/bin"
-      unzip -j flake8_to_ruff*.whl '**/flake8-to-ruff' -d "${CRAFT_PART_INSTALL}"
-    stage:
-      - flake8-to-ruff
-    prime:
-      - flake8-to-ruff
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
+      sh -s -- -y --no-modify-path --profile=minimal --default-toolchain stable
   ruff:
-    plugin: dump
-    source:
-      - to amd64: https://github.com/charliermarsh/ruff/releases/download/v0.0.247/ruff-x86_64-unknown-linux-gnu.tar.gz
-      - to arm64: https://github.com/charliermarsh/ruff/releases/download/v0.0.247/ruff-aarch64-unknown-linux-gnu.tar.gz
-      - to armhf: https://github.com/charliermarsh/ruff/releases/download/v0.0.247/ruff-armv7-unknown-linux-gnueabihf.tar.gz
-      - to i386: https://github.com/charliermarsh/ruff/releases/download/v0.0.247/ruff-i686-unknown-linux-gnu.tar.gz
-      - to ppc64el: https://github.com/charliermarsh/ruff/releases/download/v0.0.247/ruff-powerpc64le-unknown-linux-gnu.tar.gz
-      - to s390x: https://github.com/charliermarsh/ruff/releases/download/v0.0.247/ruff-s390x-unknown-linux-gnu.tar.gz
-    source-type: tar
-    stage:
-      - ruff
-    prime:
-      - ruff
+    after: [rust-deps]
+    plugin: rust
+    source: https://github.com/astral-sh/ruff
+    source-type: git
+    source-tag: v0.1.4
+    source-depth: 1
+    rust-path: [crates/ruff_cli]
+  flake8-to-ruff:
+    after: [rust-deps]
+    plugin: rust
+    source: https://github.com/astral-sh/ruff
+    source-type: git
+    source-tag: v0.1.4
+    source-depth: 1
+    rust-path: [crates/flake8_to_ruff]
 
 apps:
   ruff:
-    command: ruff
+    command: bin/ruff
     plugs:
       - home
       - removable-media
   flake8-to-ruff:
-    command: flake8-to-ruff
+    command: bin/flake8-to-ruff
     plugs:
       - home
       - removable-media
