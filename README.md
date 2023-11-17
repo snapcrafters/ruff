@@ -4,12 +4,13 @@ A [snapcraft](https://snapcraft.io/about) package for [Ruff](https://github.com/
 
 NOTE: The core24 branch contains a testing version of this snap using the prerelease
 core24 ubuntu base. Use with caution.
+The edge branch gets the latest snapshot of ruff and builds it. Good luck!
 
 ## Installing
 
 To install the core24 branch, you can run:
 
-    sudo snap install --channel=latest/beta/core24 ruff 
+    sudo snap install --channel=latest/edge ruff 
 
 ## Build
 
