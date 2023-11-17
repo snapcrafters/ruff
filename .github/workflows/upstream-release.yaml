@@ -16,7 +16,7 @@ permissions:
 jobs:
   sync-gh-releases:
     name: Sync upstream releases
-    uses: lengau/snappify/.github/workflows/sync-gh-releases.yaml@v0.0.3
+    uses: lengau/snappify/.github/workflows/sync-gh-releases.yaml@c29366560f49fb1e20cca823654c87d81678ce0a
     with:
       upstream_repository: astral-sh/ruff
       max_releases: 2
@@ -31,13 +31,9 @@ jobs:
       matrix:
         tag: ${{ fromJSON(needs.sync-gh-releases.outputs.release_tags) }}
     steps:
-      - name: Install Snapcraft
-        run: sudo snap install --classic snapcraft
       - uses: actions/checkout@v3
         with:
           ref: ${{ matrix.tag }}
-      - uses: snapcore/action-build@v1
-        id: snapcraft
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -45,9 +41,3 @@ jobs:
           body: See upstream release at https://github.com/charliermarsh/ruff/releases/tag/${{ matrix.tag }}
           prerelease: ${{ contains(matrix.tag, 'pre') }}
           tag_name: ${{ matrix.tag }}
-          files: "*.snap"
-      - name: Publish to Snapcraft
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
-        run: |
-          echo *.snap | xargs --max-args=1 --max-procs=0 snapcraft upload --quiet --release latest/candidate
