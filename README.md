@@ -1,3 +1,7 @@
+[![ruff](https://snapcraft.io/ruff/badge.svg)](https://snapcraft.io/ruff)
+[![ruff](https://snapcraft.io/ruff/trending.svg?name=0)](https://snapcraft.io/ruff)
+
+
 # ruff-snap
 
 A [snap](https://snapcraft.io/about) package for [Ruff](https://github.com/charliermarsh/ruff). It also contains flake8-to-ruff.
