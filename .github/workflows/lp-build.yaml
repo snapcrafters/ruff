@@ -1,0 +1,27 @@
+name: Trigger a Launchpad build
+
+on:
+  workflow_dispatch:  # Allow manual run
+  workflow_call: # Allow calling from another workflow
+  schedule:
+    - cron: "0 */6 * * *"  # Every 6 hours
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+
+jobs:
+  trigger-build:
+    name: Trigger a launchpad build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          date > .last_sync
+          git config user.name 'Automatic sync trigger bot'
+          git config user.email 'bots+ruff-sync-trigger@port0.dev'
+          git commit -m 'Trigger a new LP build'
+          git push
