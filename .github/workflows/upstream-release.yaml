@@ -12,6 +12,7 @@ permissions:
   contents: write
   packages: write
   issues: write
+  pull-requests: write
 
 jobs:
   sync-gh-releases:
@@ -21,7 +22,7 @@ jobs:
       upstream_repository: astral-sh/ruff
       max_releases: 2
       prep_script: tools/prep_release.sh
-  do_releases:
+  do-releases:
     name: Release ${{ matrix.tag }}
     runs-on: ubuntu-latest
     needs: sync-gh-releases
@@ -41,3 +42,22 @@ jobs:
           body: See upstream release at https://github.com/charliermarsh/ruff/releases/tag/${{ matrix.tag }}
           prerelease: ${{ contains(matrix.tag, 'pre') }}
           tag_name: ${{ matrix.tag }}
+  sync-to-core24: # Sync changes from main to the core24 branch.
+    needs: sync-gh-releases
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node  # Needed for the sync-branches action
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Sync branches
+        uses: TreTuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN:  ${{ github.token }}
+          FROM_BRANCH: "main"
+          TO_BRANCH: "core24"
+          CONTENT_COMPARISON: true
+          REVIEWERS: '["lengau"]'
+          PULL_REQUEST_AUTO_MERGE_METHOD: merge
+
