@@ -52,6 +52,7 @@ jobs:
         with:
           node-version: 12
       - name: Sync branches
+        id: sync-pr
         uses: TreTuna/sync-branches@1.4.0
         with:
           GITHUB_TOKEN:  ${{ github.token }}
@@ -60,4 +61,9 @@ jobs:
           CONTENT_COMPARISON: true
           REVIEWERS: '["lengau"]'
           PULL_REQUEST_AUTO_MERGE_METHOD: merge
+      - name: Merge PR if possible
+        run: |
+          if [[ ${{ steps.sync-pr.outputs.PULL_REQUEST_NUMBER }} ]]; then
+            gh pr merge ${{ steps.sync-pr.outputs.PULL_REQUEST_NUMBER }}
+          fi
 
