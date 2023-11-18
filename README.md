@@ -6,11 +6,14 @@
 
 A [snap](https://snapcraft.io/about) package for [Ruff](https://github.com/charliermarsh/ruff). It also contains flake8-to-ruff.
 
+NOTE: The core24 branch contains a testing version of this snap using the prerelease
+core24 ubuntu base. Use with caution.
+
 ## Installing
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ruff)
 
-    sudo snap install ruff 
+    sudo snap install --channel=latest/beta/core24 ruff 
 
 ## Build
 
