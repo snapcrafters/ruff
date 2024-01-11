@@ -27,7 +27,7 @@ jobs:
             )
             sed -i 's/^\(version: \).*$/\1'"$VERSION"'/' snap/snapcraft.yaml
   sync-to-core24: # Sync changes from main to the core24 branch.
-    needs: sync-gh-releases
+    needs: sync
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
