@@ -4,7 +4,7 @@
 
 # ruff-snap
 
-A [snap](https://snapcraft.io/about) package for [Ruff](https://github.com/charliermarsh/ruff). It also contains flake8-to-ruff.
+A [snap](https://snapcraft.io/about) package for [Ruff](https://github.com/astral-sh/ruff).
 
 ## Installing
 
