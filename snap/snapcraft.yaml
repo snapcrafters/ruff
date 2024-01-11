@@ -47,7 +47,7 @@ parts:
     plugin: rust
     source: https://github.com/astral-sh/ruff
     source-type: git
-    source-tag: v0.1.11
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
     rust-path: [crates/ruff_cli]
   flake8-to-ruff:
@@ -55,7 +55,7 @@ parts:
     plugin: rust
     source: https://github.com/astral-sh/ruff
     source-type: git
-    source-tag: v0.1.11
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
     rust-path: [crates/flake8_to_ruff]
 

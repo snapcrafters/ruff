@@ -1,0 +1,47 @@
+name: Update
+
+on:
+  # Runs at 10:00 UTC every day
+  schedule:
+    - cron:  '0 10 * * *'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: 🔄 Sync version with upstream
+    environment: "Candidate Branch"
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Sync version with upstream
+        uses: snapcrafters/ci/sync-version@main
+        with:
+          token: ${{ secrets.SNAPCRAFTERS_BOT_COMMIT }}
+          update-script: |
+            VERSION=$(
+              curl -sL https://api.github.com/repos/astral-sh/ruff/releases/latest | jq -r .tag_name | tr -d "v"
+            )
+            sed -i 's/^\(version: \).*$/\1'"$VERSION"'/' snap/snapcraft.yaml
+  sync-to-core24: # Sync changes from main to the core24 branch.
+    needs: sync-gh-releases
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node  # Needed for the sync-branches action
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Sync branches
+        id: sync-pr
+        uses: TreTuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN:  ${{ github.token }}
+          FROM_BRANCH: "main"
+          TO_BRANCH: "core24"
+          CONTENT_COMPARISON: true
+          REVIEWERS: '["lengau"]'
+          PULL_REQUEST_AUTO_MERGE_METHOD: merge
