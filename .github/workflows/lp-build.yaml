@@ -1,10 +1,10 @@
-name: Trigger a Launchpad build
+name: Trigger a Launchpad build on edge
 
 on:
   workflow_dispatch:  # Allow manual run
   workflow_call: # Allow calling from another workflow
   schedule:
-    - cron: "0 */6 * * *"  # Every 6 hours
+    - cron: "0 */5 * * *"  # Every 5 hours, which is how often Launchpad syncs.
 
 permissions:
   contents: write
@@ -19,9 +19,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: edge
       - run: |
           date > .last_sync
           git config user.name 'Automatic sync trigger bot'
           git config user.email 'bots+ruff-sync-trigger@port0.dev'
+          git add .last_sync
           git commit -m 'Trigger a new LP build'
           git push

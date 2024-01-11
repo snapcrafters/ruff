@@ -33,36 +33,25 @@ issues:
 source-code: https://github.com/astral-sh/ruff
 website: https://github.com/astral-sh/ruff
 
-build-packages:
-  - curl
+architectures:
+  - amd64
+  - arm64
+  - armhf
+  - ppc64el
+  - riscv64
+  - s390x
 
 parts:
-  rust-deps:  # TODO: This will no longer be needed with Snapcraft 8
-    plugin: nil
-    override-pull: |
-      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
-      sh -s -- -y --no-modify-path --profile=minimal --default-toolchain stable
   ruff:
-    after: [rust-deps]
     plugin: rust
     source: https://github.com/astral-sh/ruff
     source-type: git
-    rust-path: [crates/ruff_cli]
-  flake8-to-ruff:
-    after: [rust-deps]
-    plugin: rust
-    source: https://github.com/astral-sh/ruff
-    source-type: git
-    rust-path: [crates/flake8_to_ruff]
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    source-depth: 1
 
 apps:
   ruff:
-    command: bin/ruff
-    plugs:
-      - home
-      - removable-media
-  flake8-to-ruff:
-    command: bin/flake8-to-ruff
+    command: ruff
     plugs:
       - home
       - removable-media
