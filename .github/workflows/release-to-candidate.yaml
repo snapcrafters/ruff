@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: "Candidate Branch"
     strategy:
+      fail-fast: false
       matrix:
         architecture: ${{ fromJSON(needs.get-architectures.outputs.architectures-list) }}
     steps:
