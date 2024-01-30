@@ -6,11 +6,19 @@
 
 A [snap](https://snapcraft.io/about) package for [Ruff](https://github.com/astral-sh/ruff).
 
+NOTE: The core24 branch contains a testing version of this snap using the prerelease
+core24 ubuntu base. Use with caution.
+The edge branch gets the latest snapshot of ruff and builds it. Good luck!
+
 ## Installing
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ruff)
 
     sudo snap install ruff 
+    
+To install the core24 branch, you can run:
+
+    sudo snap install --channel=latest/edge ruff 
 
 ## Build
 

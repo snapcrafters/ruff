@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   trigger-build:
+    name: Trigger a launchpad build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

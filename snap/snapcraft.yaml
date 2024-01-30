@@ -1,5 +1,5 @@
 name: ruff
-version: 0.1.15
+version: git
 summary: An extremely fast Python linter, written in Rust.
 # noinspection YAMLSchemaValidation
 # https://youtrack.jetbrains.com/issue/PY-58754
@@ -20,9 +20,9 @@ description: |
   N.B. snap confinement: The snap package for ruff is limited by default to accessing files in your home directory.
 
 confinement: strict
-base: core22
+base: core24
 # The base that the builds run on - allows building for other architectures
-build-base: core22
+build-base: core24
 # Performance difference with xz vs lzo is small in this case, but provides
 # a ~40% reduction in file size for a very frequently updating snap.
 compression: xz
