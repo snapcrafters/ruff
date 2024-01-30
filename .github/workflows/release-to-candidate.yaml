@@ -3,7 +3,7 @@ name: Release
 on:
   # Run the workflow each time new commits are pushed to the candidate branch.
   push:
-    branches: [ "candidate", "core24" ]
+    branches: [ "candidate", "edge" ]
   workflow_dispatch:
 
 concurrency:
@@ -39,10 +39,14 @@ jobs:
       - name: Detect channel
         id: get_channel
         run: |
-          if [[ $GITHUB_REF_NAME == "core24" ]]; then
+          if [[ "${GITHUB_REF_NAME}" == "core24" ]]; then
             echo "channel=beta/core24" >> $GITHUB_OUTPUT
-          else
+          elif [[ "${GITHUB_REF_NAME}" == "candidate" ]]; then
             echo "channel=candidate" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF_NAME}" == "edge" ]]; then
+            echo "channel=edge" >> $GITHUB_OUTPUT
+          else
+            echo "channel=edge/${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
           fi
       - name: 🚢 Release to latest/candidate
         uses: snapcrafters/ci/release-to-candidate@main

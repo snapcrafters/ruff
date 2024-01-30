@@ -43,7 +43,6 @@ architectures:
 
 parts:
   ruff:
-    # after: [rust-deps]
     plugin: rust
     source: https://github.com/astral-sh/ruff
     source-type: git
