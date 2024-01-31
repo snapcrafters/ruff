@@ -34,12 +34,12 @@ source-code: https://github.com/astral-sh/ruff
 website: https://github.com/astral-sh/ruff
 
 architectures:
- - amd64
- - arm64
- - armhf
- # - ppc64el
- # - riscv64
- # - s390x
+  - amd64
+  - arm64
+  - armhf
+  - ppc64el
+  - riscv64
+  - s390x
 
 parts:
   ruff:
