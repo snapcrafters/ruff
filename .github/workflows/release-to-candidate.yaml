@@ -84,42 +84,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run tests
         id: tests
-        run: |
-          repositories(){
-            echo https://github.com/snapcore/snapcraft
-            echo https://github.com/canonical/charmcraft
-            echo https://github.com/canonical/rockcraft
-            echo https://github.com/pytest-dev/pytest
-            echo https://github.com/python/mypy
-            echo https://github.com/jupyter-server/jupyter_server
-          }
-
-          test_repo(){
-            local repo_dir=$(mktemp --directory ruff-test-XXXXXXXX)
-            git clone $1 $repo_dir
-            pushd $repo_dir
-            ruff check
-            ruff format
-          }
-
-          any_failed=false
-          for repo in $(repositories); do
-            echo "::group::${repo}"
-            if (test_repo "${repo}"); then
-              echo "status=success" >> "${GITHUB_OUTPUT}"
-              echo "::endgroup::"
-              echo "Succeeded"
-            else
-              exit_code=$?
-              any_failed=true
-              echo "status=failed with exit code $exit_code" >> "${GITHUB_OUTPUT}"
-              echo "::endgroup::"
-              echo "Failed with exit code $exit_code"
-            fi
-          done
-          if [[ $any_failed == "true" ]]; then
-            exit 1
-          fi
+        run: ./test.sh $GITHUB_OUTPUT
       - name: 🗒️ Log test results
         if: ${{ success() || failure() && steps.tests.conclusion == 'failure' }}
         uses: snapcrafters/ci/log-test-results@main
