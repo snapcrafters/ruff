@@ -8,7 +8,7 @@ description: |
   functionality behind a single, common interface.
 
   - ⚡️ 10-100x faster than existing linters (like Flake8) and formatters (like Black)
-  - 🫰 Installable via `snap`
+  - 🐧 Installable via `snap`
   - 🛠️ `pyproject.toml` support
   - 🤝 Python 3.12 compatibility
   - ⚖️ Drop-in parity with Flake8, isort, and Black
