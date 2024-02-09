@@ -72,6 +72,61 @@ jobs:
           architectures: ${{ needs.get-architectures.outputs.architectures }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+  test:
+    name: 🗒️ Test snap
+    needs: call-for-testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💾 Setup tests
+        uses: snapcrafters/ci/setup-tests@main
+        with:
+          issue-number: ${{ needs.call-for-testing.outputs.issue-number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run tests
+        id: tests
+        run: |
+          repositories(){
+            echo https://github.com/snapcore/snapcraft
+            echo https://github.com/canonical/charmcraft
+            echo https://github.com/canonical/rockcraft
+            echo https://github.com/pytest-dev/pytest
+            echo https://github.com/python/mypy
+            echo https://github.com/jupyter-server/jupyter_server
+          }
+
+          test_repo(){
+            local repo_dir=$(mktemp --directory ruff-test-XXXXXXXX)
+            git clone $1 $repo_dir
+            pushd $repo_dir
+            ruff check
+            ruff format
+          }
+
+          any_failed=false
+          for repo in $(repositories); do
+            echo "::group::${repo}"
+            if (test_repo "${repo}"); then
+              echo "status=success" >> "${GITHUB_OUTPUT}"
+              echo "::endgroup::"
+              echo "Succeeded"
+            else
+              exit_code=$?
+              any_failed=true
+              echo "status=failed with exit code $exit_code" >> "${GITHUB_OUTPUT}"
+              echo "::endgroup::"
+              echo "Failed with exit code $exit_code"
+            fi
+          done
+          if [[ $any_failed == "true" ]]; then
+            exit 1
+          fi
+      - name: 🗒️ Log test results
+        if: ${{ success() || failure() && steps.tests.conclusion == 'failure' }}
+        uses: snapcrafters/ci/log-test-results@main
+        with:
+          issue-number: ${{ needs.call-for-testing.outputs.issue-number }}
+          test-status: ${{ steps.tests.outputs.status }}
+
   # Commented out because this is a CLI app.
   # screenshots:
   #   name: 📸 Gather screenshots
