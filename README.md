@@ -18,3 +18,7 @@ To build this for yourself, simply clone the repository and run `snapcraft pack`
 
 The snap package is built on the [launchpad project](https://launchpad.net/ruff-snap).
 View the [snap packages here](https://launchpad.net/ruff-snap/+snaps).
+
+## Usage
+
+Once installed, you can use ruff from the command line as usual. You can also use the ruff language server as `ruff.lsp`. If you'd rather use the language server with `ruff-lsp` (its default command), you can alias it using `snap alias ruff.lsp ruff-lsp`.
