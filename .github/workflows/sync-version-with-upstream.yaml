@@ -26,3 +26,7 @@ jobs:
               curl -sL https://api.github.com/repos/astral-sh/ruff/releases/latest | jq -r .tag_name | tr -d "v"
             )
             sed -i 's/^\(version: \).*$/\1'"$VERSION"'/' snap/snapcraft.yaml
+            LSP_VERSION=$(
+              curl -sL https://api.github.com/repos/astral-sh/ruff-lsp/releases/latest | jq -r .tag_name | tr -d "v"
+            )
+            sed -i 's/^\(version: \).*  # LSP version$/\1'"$VERSION"  # LSP version'/' snap/snapcraft.yaml
