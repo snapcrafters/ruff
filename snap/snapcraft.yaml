@@ -47,16 +47,22 @@ parts:
     source-type: git
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
+    stage:
+      - bin/ruff
+    organize:
+      ruff: bin/ruff
   ruff-lsp:
     plugin: python
     source: https://github.com/astral-sh/ruff-lsp
     source-type: git
     source-tag: v0.0.51  # LSP
     source-depth: 1
+    stage:
+      - -bin/ruff
 
 apps:
   ruff:
-    command: ruff
+    command: bin/ruff
     plugs:
       - home
       - removable-media
