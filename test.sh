@@ -8,7 +8,7 @@ cleanup(){
 }
 trap cleanup EXIT
 
-summary_file="${GITHUB_SUMMARY:-/dev/null}"
+summary_file="${GITHUB_STEP_SUMMARY:-/dev/stderr}"
 echo -e '## Summary:\n' > "$summary_file"
 
 repositories(){
