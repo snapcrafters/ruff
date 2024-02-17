@@ -52,13 +52,28 @@ parts:
     organize:
       ruff: bin/ruff
   ruff-lsp:
+    after: [ruff]
     plugin: python
     source: https://github.com/astral-sh/ruff-lsp
     source-type: git
     source-tag: v0.0.51  # LSP
     source-depth: 1
+    override-build: |
+      # Remove the ruff dependency since we're installing it ourselves.
+      sed -i '/"ruff[<>=>~]=[0-9.]*",/d' pyproject.toml
+      craftctl default
+    build-environment:
+      - PARTS_PYTHON_VENV_ARGS: --system-site-packages
     stage:
-      - -bin/ruff
+      - -bin/a*
+      - -bin/Activate.ps1
+      - -bin/pip*
+      - -bin/python
+      - -bin/python3.10
+      - -bin/wheel
+      - -lib/python3.10/site-packages/pip*
+      - -lib/python3.10/site-packages/setuptools*
+      - -lib/python3.10/site-packages/wheel*
 
 apps:
   ruff:
