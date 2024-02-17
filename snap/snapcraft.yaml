@@ -43,6 +43,8 @@ architectures:
 parts:
   ruff:
     plugin: rust
+    rust-path:
+      - crates/ruff
     source: https://github.com/astral-sh/ruff
     source-type: git
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
