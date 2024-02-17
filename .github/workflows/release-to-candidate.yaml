@@ -78,11 +78,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🗒️ Run tests
-        uses: lengau/snapcrafters-ci/run-tests@main
+        uses: lengau/snapcrafters-ci/run-tests@run-tests
         with:
           issue-number: ${{ needs.call-for-testing.outputs.issue-number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-script: ./test.sh
+          test-command: ./test.sh
 
   # Commented out because this is a CLI app.
   # screenshots:
