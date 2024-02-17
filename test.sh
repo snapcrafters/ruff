@@ -1,50 +1,70 @@
 #!/bin/bash
 # Tests for the ruff snap.
 
+set -e
+
+cleanup(){
+    rm -rf ruff-snap-test-*
+}
+trap cleanup EXIT
+
+summary_file="${GITHUB_SUMMARY:-/dev/null}"
+echo -e '## Summary:\n' > "$summary_file"
+
 repositories(){
-    echo https://github.com/snapcore/snapcraft
+    echo https://github.com/canonical/snapcraft
     echo https://github.com/canonical/charmcraft
     echo https://github.com/canonical/rockcraft
+    echo https://github.com/jupyter-server/jupyter_server
+    echo https://github.com/pydantic/pydantic
+    echo https://github.com/pypa/pip
     echo https://github.com/pytest-dev/pytest
     echo https://github.com/python/mypy
-    echo https://github.com/jupyter-server/jupyter_server
+    echo https://github.com/tiangolo/fastapi
 }
 
 test_repo(){
-    local repo_dir=$(mktemp --directory ruff-test-XXXXXXXX)
+    echo "::group::Repository: ${repo}"
+    local repo_dir=$(mktemp --directory ruff-snap-test-XXXXXXXX)
     git clone --depth=1 $1 $repo_dir
-    pushd $repo_dir
-    local return_code=0
-    ruff check --select=ALL
-    return_code=$?
-    ruff format
-    rc2=$?
-    if [[ $rc2 != "0" && $return_code == "0" ]]; then
-        return_code=$rc2
-    fi
-    popd
-    rm -rf $repo_dir
-    return $return_code
-}
-
-ruff version || exit 1
-ruff help || exit 1
-
-any_failed=false
-for repo in $(repositories); do
-    echo "::group::${repo}"
-    if test_repo "${repo}"; then
-        echo "status=$repo: success" >> $1
-        echo "::endgroup::"
-        echo "Succeeded"
+    check_result="Success"
+    if ruff check --exit-zero --select=ALL --preview --fix --unsafe-fixes "${repo_dir}" ; then
+        echo "- ${repo}: check success" >> $summary_file
     else
         exit_code=$?
         any_failed=true
-        echo "status=$repo: failed with exit code $exit_code" >> $1
-        echo "::endgroup::"
-        echo "Failed with exit code $exit_code"
+        check_result="Failed"
+        echo "- ${repo}: Failed with exit code $exit_code" >> $summary_file
     fi
+    if ruff format --preview "${repo_dir}" ; then
+        echo "- ${repo}: format success" >> $summary_file
+    else
+        exit_code=$?
+        any_failed=true
+        check_result="Failed"
+        echo "- ${repo}: Failed with exit code $exit_code" >> $summary_file
+    fi
+
+    echo "::endgroup::"
+    echo "$check_result"
+}
+
+echo -n "ruff version: " >> $summary_file
+ruff version | tee -a $summary_file
+echo "::endgroup::"
+echo "::group::Help"
+ruff help
+echo "::endgroup::"
+echo "::group::Rules:"
+ruff rule --all
+echo "::endgroup::"
+
+any_failed=false
+for repo in $(repositories); do
+    test_repo "${repo}"
 done
 if [[ $any_failed == "true" ]]; then
+    echo "Overall: Failed"
     exit 1
 fi
+echo "Overall: Succeeded"
