@@ -82,7 +82,7 @@ jobs:
         with:
           issue-number: ${{ needs.call-for-testing.outputs.issue-number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-command: ./test.sh
+          test-script: ./test.sh
 
   # Commented out because this is a CLI app.
   # screenshots:
