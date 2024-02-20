@@ -1,5 +1,5 @@
 name: ruff
-version: 0.2.2
+version: null
 summary: An extremely fast Python linter, written in Rust.
 # noinspection YAMLSchemaValidation
 # https://youtrack.jetbrains.com/issue/PY-58754
@@ -58,7 +58,7 @@ parts:
     plugin: python
     source: https://github.com/astral-sh/ruff-lsp
     source-type: git
-    source-tag: v0.0.51  # LSP
+    source-tag: vnull  # LSP
     source-depth: 1
     override-build: |
       # Remove the ruff dependency since we're installing it ourselves.
