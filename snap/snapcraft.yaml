@@ -1,5 +1,4 @@
 name: ruff
-version: 0.2.2
 summary: An extremely fast Python linter, written in Rust.
 # noinspection YAMLSchemaValidation
 # https://youtrack.jetbrains.com/issue/PY-58754
@@ -32,6 +31,8 @@ issues:
 source-code: https://github.com/astral-sh/ruff
 website: https://github.com/astral-sh/ruff
 
+adopt-info: ruff
+
 architectures:
   - amd64
   - arm64
@@ -47,12 +48,16 @@ parts:
       - crates/ruff
     source: https://github.com/astral-sh/ruff
     source-type: git
-    source-tag: v$SNAPCRAFT_PROJECT_VERSION
-    source-depth: 1
     stage:
       - bin/ruff
     organize:
       ruff: bin/ruff
+    override-build: |
+      craftctl default
+      version="$(git describe --tags --always | sed -e 's/-/+git/;y/-/./')"
+      [[ -n "$(echo $version | grep "+git")" ]] && grade=devel || grade=stable
+      craftctl set version="$version"
+      craftctl set grade="$grade"
   ruff-lsp:
     after: [ruff]
     plugin: python

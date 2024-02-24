@@ -1,0 +1,49 @@
+name: Release to Edge
+
+on:
+  # Run the workflow each time new commits are pushed to the candidate branch.
+  push:
+    branches: [ "edge" ]
+  # Runs at 8:00 UTC every day
+  schedule:
+    - cron:  '0 8 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  get-architectures:
+    name: 🖥 Get snap architectures
+    runs-on: ubuntu-latest
+    outputs:
+      architectures: ${{ steps.get-architectures.outputs.architectures }}
+      architectures-list: ${{ steps.get-architectures.outputs.architectures-list }}
+    steps:
+      - name: 🖥 Get snap architectures
+        id: get-architectures
+        uses: snapcrafters/ci/get-architectures@main
+
+  release:
+    name: 🚢 Release to latest/edge
+    needs: get-architectures
+    runs-on: ubuntu-latest
+    environment: "Edge Branch"
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture: ${{ fromJSON(needs.get-architectures.outputs.architectures-list) }}
+    steps:
+      - name: 🚢 Release to latest/edge
+        uses: snapcrafters/ci/release-to-candidate@main
+        with:
+          channel: latest/edge
+          architecture: ${{ matrix.architecture }}
+          launchpad-token: ${{ secrets.LP_BUILD_SECRET }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          store-token: ${{ secrets.SNAP_STORE_CANDIDATE }}
