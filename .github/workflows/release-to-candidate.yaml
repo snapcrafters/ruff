@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🗒️ Run tests
-        uses: lengau/snapcrafters-ci/run-tests@run-tests
+        uses: snapcrafters/ci/run-tests@main
         with:
           issue-number: ${{ needs.call-for-testing.outputs.issue-number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
