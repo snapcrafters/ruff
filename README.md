@@ -1,6 +1,6 @@
 [![ruff](https://snapcraft.io/ruff/badge.svg)](https://snapcraft.io/ruff)
 [![ruff](https://snapcraft.io/ruff/trending.svg?name=0)](https://snapcraft.io/ruff)
-[![Release](https://github.com/lengau/ruff-snap/actions/workflows/release-to-candidate.yaml/badge.svg)](https://github.com/lengau/ruff-snap/actions/workflows/release-to-candidate.yaml)
+[![Release](https://github.com/snapcrafters/ruff/actions/workflows/release-to-candidate.yaml/badge.svg)](https://github.com/snapcrafters/ruff/actions/workflows/release-to-candidate.yaml)
 
 # ruff-snap
 
