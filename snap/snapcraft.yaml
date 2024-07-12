@@ -19,26 +19,24 @@ description: |
   - 🌎 Monorepo-friendly, with hierarchical and cascading configuration
 
 confinement: strict
-base: core22
-# The base that the builds run on - allows building for other architectures
-build-base: core22
+base: core24
 # Performance difference with xz vs lzo is small in this case, but provides
 # a ~40% reduction in file size for a very frequently updating snap.
 compression: xz
-contact: https://github.com/lengau/ruff/issues
+contact: https://github.com/snapcrafters/ruff/issues
 issues:
-  - https://github.com/lengau/ruff-snap/issues
+  - https://github.com/snapcrafters/ruff-snap/issues
   - https://github.com/astral-sh/ruff/issues
 source-code: https://github.com/astral-sh/ruff
 website: https://github.com/astral-sh/ruff
 
-architectures:
-  - amd64
-  - arm64
-  - armhf
-  - ppc64el
-  - riscv64
-  - s390x
+platforms:
+  amd64:
+  arm64:
+  armhf:
+  ppc64el:
+  riscv64:
+  s390x:
 
 parts:
   ruff:
@@ -47,35 +45,12 @@ parts:
       - crates/ruff
     source: https://github.com/astral-sh/ruff
     source-type: git
-    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    source-tag: $SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
     stage:
       - bin/ruff
     organize:
       ruff: bin/ruff
-  ruff-lsp:
-    after: [ruff]
-    plugin: python
-    source: https://github.com/astral-sh/ruff-lsp
-    source-type: git
-    source-tag: v0.0.54  # LSP
-    source-depth: 1
-    override-build: |
-      # Remove the ruff dependency since we're installing it ourselves.
-      sed -i '/"ruff[<>=>~]=[0-9.]*",/d' pyproject.toml
-      craftctl default
-    build-environment:
-      - PARTS_PYTHON_VENV_ARGS: --system-site-packages
-    stage:
-      - -bin/a*
-      - -bin/Activate.ps1
-      - -bin/pip*
-      - -bin/python
-      - -bin/python3.10
-      - -bin/wheel
-      - -lib/python3.10/site-packages/pip*
-      - -lib/python3.10/site-packages/setuptools*
-      - -lib/python3.10/site-packages/wheel*
 
 apps:
   ruff:
@@ -83,5 +58,3 @@ apps:
     plugs:
       - home
       - removable-media
-  lsp:
-    command: bin/ruff-lsp
