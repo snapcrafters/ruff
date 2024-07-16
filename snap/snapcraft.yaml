@@ -35,7 +35,8 @@ platforms:
   arm64:
   armhf:
   ppc64el:
-  riscv64:
+  # Removed due to issues with launchpad's riscv builders: https://github.com/snapcrafters/ruff/issues/45
+  # riscv64:
   s390x:
 
 parts:
