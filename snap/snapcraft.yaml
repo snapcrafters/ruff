@@ -1,5 +1,5 @@
 name: ruff
-version: 0.5.7
+version: 0.6.0
 summary: An extremely fast Python linter, written in Rust.
 # noinspection YAMLSchemaValidation
 # https://youtrack.jetbrains.com/issue/PY-58754
