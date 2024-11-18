@@ -23,7 +23,7 @@ jobs:
       - name: 🔄 Sync version with upstream
         uses: snapcrafters/ci/sync-version@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SNAPCRAFTERS_BOT_COMMIT }}
           update-script: |
             VERSION=$(
               curl -sL https://api.github.com/repos/astral-sh/ruff/releases/latest | jq -r .tag_name
