@@ -11,8 +11,9 @@ concurrency:
 jobs:
   build:
     name: 🧪 Build snap
-    matrix:
-      os: [ubuntu-latest, ubuntu-24.04-arm]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     steps:
       - name: 🧪 Build snap
