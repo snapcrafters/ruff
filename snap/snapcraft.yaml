@@ -47,6 +47,12 @@ parts:
     source-type: git
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
+    build-environment:
+      # See: https://github.com/lengau/uv-snap/issues/10
+      - to arm64:
+        - JEMALLOC_SYS_WITH_LG_PAGE: 16
+      - to ppc64el:
+        - JEMALLOC_SYS_WITH_LG_PAGE: 16
     stage:
       - bin/ruff
     organize:
