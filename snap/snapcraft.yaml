@@ -32,7 +32,7 @@ website: https://github.com/astral-sh/ruff
 
 package-repositories:
   - type: apt
-    architectures: [$CRAFT_ARCH_BUILD_FOR]
+    architectures: [$CRAFT_ARCH_BUILD_ON]
     formats: [deb, deb-src]
     components: [main]
     suites: [noble, noble-updates, noble-backports]
@@ -69,15 +69,11 @@ parts:
       - clang-20
       - musl-dev
       - musl-tools
-    stage:
-      - bin/ruff
-    organize:
-      ruff: bin/ruff
     override-build: |
       rustup target add ${CARGO_BUILD_TARGET}
       craftctl default
       # manually install the ruff binary as its target dir differs
-      install -Dvm755 ./target/${CARGO_BUILD_TARGET}/release/ruff "${CRAFT_PART_INSTALL}/ruff"
+      install -Dvm755 ./target/${CARGO_BUILD_TARGET}/release/ruff "${CRAFT_PART_INSTALL}/bin/ruff"
 
 apps:
   ruff:
