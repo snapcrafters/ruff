@@ -18,3 +18,7 @@ jobs:
     steps:
       - name: 🧪 Build snap
         uses: snapcrafters/ci/test-snap-build@main
+      - name: 🗒️ Run tests
+        uses: snapcrafters/ci/run-tests@main
+        with:
+          test-script: ./test.sh
