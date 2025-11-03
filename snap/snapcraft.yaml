@@ -60,16 +60,11 @@ parts:
       - CARGO_CFG_TARGET_FEATURE: crt-static
       - CC: clang-20
       - CARGO_PROFILE_RELEASE_LTO: "off"
-      # See: https://github.com/lengau/uv-snap/issues/10
-      - to arm64:
-        - JEMALLOC_SYS_WITH_LG_PAGE: "16"
-      - to ppc64el:
-        - JEMALLOC_SYS_WITH_LG_PAGE: "16"
     build-packages:
       - libclang-20-dev
       - cmake
       - gcc-arm-linux-gnueabihf
-      - libc6-dev-$CRAFT_ARCH_BUILD_FOR-cross
+      - libc6-dev-armhf-cross
       # Use clang for the armhf build so we can build for musl.
       - clang-20
       - musl-dev
@@ -81,8 +76,8 @@ parts:
     override-build: |
       rustup target add ${CARGO_BUILD_TARGET}
       craftctl default
-      # manually install binaries as their target dir differs
-      find ./target/${CARGO_BUILD_TARGET}/release -maxdepth 1 -executable -exec install -Dvm755 '{}' "${CRAFT_PART_INSTALL}/" ';'
+      # manually install the ruff binary as its target dir differs
+      install -Dvm755 ./target/${CARGO_BUILD_TARGET}/release/ruff "${CRAFT_PART_INSTALL}/ruff"
 
 apps:
   ruff:
