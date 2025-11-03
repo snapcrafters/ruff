@@ -32,7 +32,7 @@ website: https://github.com/astral-sh/ruff
 
 package-repositories:
   - type: apt
-    architectures: [$CRAFT_ARCH_BUILD_ON]
+    architectures: [$CRAFT_ARCH_BUILD_FOR]
     formats: [deb, deb-src]
     components: [main]
     suites: [noble, noble-updates, noble-backports]
