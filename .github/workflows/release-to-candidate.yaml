@@ -4,9 +4,6 @@ on:
   # Run the workflow each time new commits are pushed to the candidate branch.
   push:
     branches: [ "candidate" ]
-  # Also run on PRs to the candidate-armhf branch for testing.
-  pull_request:
-    branches: [ "candidate-armhf" ]
   workflow_dispatch:
 
 concurrency:
