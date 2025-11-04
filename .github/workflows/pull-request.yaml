@@ -18,4 +18,6 @@ jobs:
       - name: 🗒️ Run tests
         uses: snapcrafters/ci/run-tests@main
         with:
+          issue-number: ${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           test-script: ./test.sh
