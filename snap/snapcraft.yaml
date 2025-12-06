@@ -30,14 +30,19 @@ issues:
 source-code: https://github.com/astral-sh/ruff
 website: https://github.com/astral-sh/ruff
 
+package-repositories:
+  - type: apt
+    architectures: [$CRAFT_ARCH_BUILD_FOR]
+    formats: [deb, deb-src]
+    components: [main]
+    suites: [noble, noble-updates, noble-backports]
+    key-id: F6ECB3762474EDA9D21B7022871920D1991BC93C
+    url: http://ports.ubuntu.com/ubuntu-ports
+
 platforms:
-  amd64:
-  arm64:
-  # Disabled until we can fix https://github.com/snapcrafters/ruff/issues/117
-  # armhf:
-  ppc64el:
-  riscv64:
-  s390x:
+  armhf:
+    build-on: [arm64, amd64]
+    build-for: [armhf]
 
 parts:
   ruff:
@@ -49,15 +54,26 @@ parts:
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
     build-environment:
-      # See: https://github.com/lengau/uv-snap/issues/10
-      - to arm64:
-        - JEMALLOC_SYS_WITH_LG_PAGE: 16
-      - to ppc64el:
-        - JEMALLOC_SYS_WITH_LG_PAGE: 16
-    stage:
-      - bin/ruff
-    organize:
-      ruff: bin/ruff
+      # Build a static binary. Needed for armhf because of https://github.com/canonical/snapcraft/issues/5836
+      - CARGO_BUILD_TARGET: armv7-unknown-linux-musleabihf
+      - CARGO_TARGET_ARMV7_UNKNOWN_LINUX_MUSLEABIHF_LINKER: rust-lld
+      - CARGO_CFG_TARGET_FEATURE: crt-static
+      - CC: clang-20
+      - CARGO_PROFILE_RELEASE_LTO: "off"
+    build-packages:
+      - libclang-20-dev
+      - cmake
+      - gcc-arm-linux-gnueabihf
+      - libc6-dev-armhf-cross
+      # Use clang for the armhf build so we can build for musl.
+      - clang-20
+      - musl-dev
+      - musl-tools
+    override-build: |
+      rustup target add ${CARGO_BUILD_TARGET}
+      craftctl default
+      # manually install the ruff binary as its target dir differs
+      install -Dvm755 ./target/${CARGO_BUILD_TARGET}/release/ruff "${CRAFT_PART_INSTALL}/bin/ruff"
 
 apps:
   ruff:

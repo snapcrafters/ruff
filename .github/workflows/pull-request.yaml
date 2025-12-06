@@ -11,10 +11,7 @@ concurrency:
 jobs:
   build:
     name: 🧪 Build snap
-    strategy:
-      matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: 🧪 Build snap
         uses: snapcrafters/ci/test-snap-build@main

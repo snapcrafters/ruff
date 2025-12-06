@@ -1,0 +1,32 @@
+name: Sync to armhf branch
+
+on:
+  push:
+    branches:
+      - candidate
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  sync-armhf:
+    name: 🔄 Sync candidate branch to candidate-armhf
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the source
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.SNAPCRAFTERS_BOT_COMMIT }}
+        fetch-depth: 0
+        ref: candidate-armhf
+    - name: Merge from candidate
+      run: |
+        git pull
+        git config --global user.name "Snapcrafters Bot"
+        git config --global user.email "bot@snapcrafters.org"
+
+        git merge origin/candidate -m 'chore: merge candidate to candidate-armhf'
+        git push
